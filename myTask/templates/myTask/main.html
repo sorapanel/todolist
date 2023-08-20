@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <p>タスク一覧</p>
+    <ul>
+        {% if condition %}
+        <li>タスクが存在しません。</li>
+        {% endif %}
+        {% for task in tasks %}
+        <li>{{ task.name }} &#9;{{ task.start_date }}&#9;{{ task.start_time }}&#9;{{ task.finish_date }}&#9;{{ task.finish_time }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<br>
+
+<div class="text-center">
+    <a href="{% url 'add_task' %}" class="btn btn-lg btn-primary">タスクを登録</a>
+</div>
+{% endblock %}
