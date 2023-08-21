@@ -8,7 +8,23 @@
         <li>タスクが存在しません。</li>
         {% endif %}
         {% for task in tasks %}
-        <li>{{ task.name }} &#9;{{ task.start_date }}&#9;{{ task.start_time }}&#9;{{ task.finish_date }}&#9;{{ task.finish_time }}</li>
+        <li><button type="button" class="btn btn-light" data-toggle="modal" data-target="#myModal">{{ task.name }}</button></li>
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">{{ task.name }}</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ task.name }} &#9;{{ task.start_date }}&#9;{{ task.start_time }}&#9;{{ task.finish_date }}&#9;{{ task.finish_time }}</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                </div>
+              </div>
+            </div>
+        </div>
         {% endfor %}
     </ul>
 </div>

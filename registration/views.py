@@ -50,6 +50,7 @@ class LoginView(TemplateView):
             if user:
                 if user.is_active:
                     login(request, user)
+                    request.session['username'] = {'username':name,}
                     return redirect('main')
                 else:
                     message="アカウントが有効ではありません。"
