@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+{{ message }}
+<h1>アカウント管理</h1>
+<p>ユーザ名：{{ username }}</p>
+<p>総タスク数：{{ task_count }}</p>
+<p>総タスク達成数：{{ done_count }}</p>
+<p>タスク達成率：{{ task_done }}%</p>
+
+<a href="{% url 'delete' %}">アカウント削除</a>
+{% endblock %}

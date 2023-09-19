@@ -12,4 +12,6 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name="login"),
     path('signup', views.SignUpView.as_view(), name="signup"),
     path('logout/', login_required(views.Logout), name="logout"),
+    path('delete/', login_required(views.DeleteView.as_view()), name="delete"),
+    path('delete_comp',views.DeleteComp, name = "delete_comp"),
 ]
