@@ -25,24 +25,25 @@ def Main(request):
 
 
     for content in contents:
-        if content.active or content.done:
-            task_id = content.task_id
-            name = content.name
-            description = content.description
-            start_date = content.start_date
-            start_time = content.start_time
-            finish_date = content.finish_date
-            finish_time = content.finish_time
+        if content.active:
+            if not content.done:
+                task_id = content.task_id
+                name = content.name
+                description = content.description
+                start_date = content.start_date
+                start_time = content.start_time
+                finish_date = content.finish_date
+                finish_time = content.finish_time
 
-            tasks.append({
-                'task_id':task_id,
-                'name':name,
-                'description':description,
-                'start_date':start_date,
-                'start_time':start_time,
-                'finish_date':finish_date,
-                'finish_time':finish_time,
-            })
+                tasks.append({
+                    'task_id':task_id,
+                    'name':name,
+                    'description':description,
+                    'start_date':start_date,
+                    'start_time':start_time,
+                    'finish_date':finish_date,
+                    'finish_time':finish_time,
+                })
 
     sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
     sorted_tasks = sorted(sorted_tasks, key=lambda x: x["start_date"])
@@ -221,7 +222,7 @@ def Manage(request):
                 'username':username['username'],
                 'task_count':count['task_count'],
                 'done_count':count['done_count'],
-                'task_done':task_done,
+                'task_done':task_done*100,
             }
             return render(request, "myTask/manage.html", params)
         else:
