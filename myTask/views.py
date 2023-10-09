@@ -2,12 +2,14 @@ from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-from .models import TaskModel
+from .models import TaskModel, LikeModel
 from .forms import TaskForm,TaskForm_Update
 import datetime
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
 from django import forms
+import json
+from django.http import JsonResponse
 
 # Create your views here.
 def Main(request):
@@ -106,7 +108,8 @@ class FormView(TemplateView):
                 
             user_name = request.session.get('username', None)
             if user_name is not None:
-                TaskModel.objects.create(name=name, description=description, start_date=start_date, start_time=start_time, finish_date=finish_date, finish_time=finish_time, user_name=user_name['username'],)
+                task = TaskModel.objects.create(name=name, description=description, start_date=start_date, start_time=start_time, finish_date=finish_date, finish_time=finish_time, user_name=user_name['username'],)
+                task.save()
                 return redirect('main')
             else:
                 message="もう一度ログインしなおしてください。"
@@ -230,3 +233,75 @@ def Manage(request):
             return render(request, "myTask/manage.html", context = {"username":username["username"], "task_count":0, "done_count":0, "task_done":0, "message":message})
     else:
         return redirect('main')
+    
+def OnlineTask(request):
+    contents = TaskModel.objects.filter(active=True, done=True)
+
+    tasks = []
+
+    condition = True 
+
+    if any(contents):
+        condition = False
+
+
+    for content in contents:
+        task_id = content.task_id
+        name = content.name
+        description = content.description
+        start_date = content.start_date
+        start_time = content.start_time
+        finish_date = content.finish_date
+        finish_time = content.finish_time
+        user_name = content.user_name
+        like = content.like
+
+        tasks.append({
+            'task_id':task_id,
+            'name':name,
+            'description':description,
+            'start_date':start_date,
+            'start_time':start_time,
+            'finish_date':finish_date,
+            'finish_time':finish_time,
+            'user_name':user_name,
+            'like':like,
+        })
+
+    sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
+    sorted_tasks = sorted(sorted_tasks, key=lambda x: x["start_date"])
+    
+    if request.method == 'POST':
+        task_id = request.POST.get('like')
+
+        print(task_id)
+        task = TaskModel.objects.get(task_id = task_id)
+        username = request.session.get('username', None)
+        like = LikeModel.objects.create(user_name=user_name, task=task)
+        islike = LikeModel.objects.get(task=task, user_name = username['username'])
+
+        if islike is not None:
+            if islike.is_like:
+                islike.is_like = False
+                islike.save()
+                task.like -= 1
+                task.save()
+            else:
+                islike.is_like = True
+                islike.save()
+                task.like += 1
+                task.save()
+        else:
+            print("LikeModelが存在しません。")
+
+    params = {
+            'tasks':sorted_tasks,
+            'condition':condition,
+    }
+
+    return render(request, 'myTask/onlineTask.html', params)
+
+
+
+
+

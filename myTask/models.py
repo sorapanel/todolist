@@ -13,3 +13,16 @@ class TaskModel(models.Model):
     like = models.IntegerField(null=False,blank=False,default=0,)
     active = models.BooleanField(null=False, default=True)
     done = models.BooleanField(null=False, default=False,)
+
+class LikeModel(models.Model):
+    is_like = models.BooleanField(null=False, default=False,)
+    task = models.ForeignKey(TaskModel, on_delete=models.CASCADE, to_field="task_id",)
+    user_name = models.CharField(null=False, max_length=100, blank=False,)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["task", "user_name"],
+                name="like_unique"
+            ),
+        ]
