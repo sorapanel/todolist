@@ -5,12 +5,41 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <style>
+        @font-face {
+        font-family: 'hand-letter'; 
+        src: url("{% static 'hand_letter.ttf' %}") format('truetype'); 
+        }
+    
+        .hand-letter{
+            font-family: 'hand-letter', sans-serif;
+        }
+
+        body {
+            background-image: url("{% static 'text_ver2.png' %}");
+            background-repeat: repeat;
+        }
+        .edit-task{
+            background-image: url('{% static "stickynote_11.png" %}');
+            background-size: cover;
+            padding: 10px;
+            color: #000000;
+            font-size: large;
+        }
+        .add-task{
+            background-image: url('{% static "addTask_image_ver2.jpg" %}');
+            background-size: cover;
+            color: black;
+            padding: 20px;
+            font-size: large;
+        }
+    </style>
 </head>
     
 <body>
     <!-- ナビゲーションバー -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'main' %}" style="font-size: 24px;">My Task</a>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f0f0f0;">
+        <a class="navbar-brand font-weight-bold" href="{% url 'main' %}" style="color: #3498db;">My Task</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -33,7 +62,12 @@
         {% block content %}
         {% endblock %}
     </div>
-    
+    <!-- <script>
+        var images = ['{% static "stickynote_1.png" %}','{% static "stickynote_2.png" %}','{% static "stickynote_3.png" %}','{% static "stickynote_4.png" %}','{% static "stickynote_5.png" %}','{% static "stickynote_6.png" %}','{% static "stickynote_7.png" %}','{% static "stickynote_8.png" %}'];
+        var randomIndex = Math.floor(Math.random() * images.length);
+        var element = document.querySelector(".edit-task");
+        element.style.backgroundImage = 'url(' + images[randomIndex] + ')';
+    </script> -->
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>

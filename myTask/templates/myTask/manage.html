@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-{{ message }}
-<h1>アカウント管理</h1>
-<p>ユーザ名：{{ username }}</p>
-<p>総タスク数：{{ task_count }}</p>
-<p>総タスク達成数：{{ done_count }}</p>
-<p>タスク達成率：{{ task_done }}%</p>
+<p class="hand-letter">{{ message }}</p>
+<p class="hand-letter" style="font-size: x-large;">アカウント管理</p>
+<p class="hand-letter">ユーザ名：{{ username }}</p>
+<p class="hand-letter">総タスク数：{{ task_count }}</p>
+<p class="hand-letter">総タスク達成数：{{ done_count }}</p>
+<p class="hand-letter">タスク達成率：{{ task_done }}%</p>
 
-<a href="{% url 'delete' %}">アカウント削除</a>
+<a class="hand-letter" href="{% url 'delete' %}" style="color: red;">アカウント削除</a>
 {% endblock %}
