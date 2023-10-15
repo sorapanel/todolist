@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<p class="hand-letter" style="font-size: x-large;">タスク一覧</p>
 <div>
-    <p>タスク一覧</p>
     <ul>
         {% if condition %}
-        <li>タスクが存在しません。</li>
+        <li class="hand-letter">タスクが存在しません。</li>
         {% endif %}
         {% for task in tasks %}
         <div>
-          <li><p>{{ task.name }} &#9;{{ task.start_date }}&#9;{{ task.start_time }}&#9;{{ task.finish_date }}&#9;{{ task.finish_time }}&#9;{{ task.id }}</p>
-          <a href="{% url 'mod_task' task.task_id %}" class="btn btn-primary">タスクを編集</a>
+          <li><p  class="hand-letter">{{ task.task_id }}-{{ task.name }} <br>開始： {{ task.start_date }}/{{ task.start_time }}&#9;終了：{{ task.finish_date }}/{{ task.finish_time }} <br> 詳細：{{ task.description }}</p>
+          <a href="{% url 'mod_task' task.task_id %}" class="edit-task hand-letter">タスクを編集</a>
+          <br><br><br>
         </div>
         {% endfor %}
     </ul>
@@ -19,6 +20,6 @@
 <br>
 
 <div class="text-center">
-    <a href="{% url 'add_task' %}" class="btn btn-lg btn-primary">タスクを登録</a>
+    <a href="{% url 'add_task' %}" class="add-task hand-letter">タスクを登録</a>
 </div>
 {% endblock %}

@@ -25,24 +25,25 @@ def Main(request):
 
 
     for content in contents:
-        if content.active or content.done:
-            task_id = content.task_id
-            name = content.name
-            description = content.description
-            start_date = content.start_date
-            start_time = content.start_time
-            finish_date = content.finish_date
-            finish_time = content.finish_time
+        if content.active:
+            if not content.done:
+                task_id = content.task_id
+                name = content.name
+                description = content.description
+                start_date = content.start_date
+                start_time = content.start_time
+                finish_date = content.finish_date
+                finish_time = content.finish_time
 
-            tasks.append({
-                'task_id':task_id,
-                'name':name,
-                'description':description,
-                'start_date':start_date,
-                'start_time':start_time,
-                'finish_date':finish_date,
-                'finish_time':finish_time,
-            })
+                tasks.append({
+                    'task_id':task_id,
+                    'name':name,
+                    'description':description,
+                    'start_date':start_date,
+                    'start_time':start_time,
+                    'finish_date':finish_date,
+                    'finish_time':finish_time,
+                })
 
     sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
     sorted_tasks = sorted(sorted_tasks, key=lambda x: x["start_date"])
@@ -72,6 +73,7 @@ class FormView(TemplateView):
     def post(self, request):
         form = self.form_class(request.POST)
         current_time = datetime.datetime.now().time()
+        current_time = current_time.replace(second=0, microsecond=0)
         current_date = datetime.date.today()
         print(current_date)
         print(current_time)
@@ -86,13 +88,15 @@ class FormView(TemplateView):
 
             
 
-            if current_time > start_time and start_date == current_date:
-                message="現在日時より以前の時刻は選択できません。"
-                return render(request, "myTask/addTask.html", {'form': form, 'message':message})
+            if start_date == current_date:
+                if current_time > start_time:
+                    message="現在日時より以前の時刻は選択できません。"
+                    return render(request, "myTask/addTask.html", {'form': form, 'message':message})
             
-            if current_time > finish_time and finish_date == current_date:
-                message="現在日時より以前の時刻は選択できません。"
-                return render(request, "myTask/addTask.html", {'form': form, 'message':message})
+            if finish_date == current_date:
+                if current_time > finish_time:
+                    message="現在日時より以前の時刻は選択できません。"
+                    return render(request, "myTask/addTask.html", {'form': form, 'message':message})
 
             if start_time > finish_time:
                 if start_date >= finish_date:
@@ -160,12 +164,8 @@ def AllTask(request):
 
     condition = True 
 
-    done_count=0
-    task_count=0
-
     if any(contents):
         condition = False
-
 
     for content in contents:
             task_id = content.task_id
@@ -175,11 +175,6 @@ def AllTask(request):
             start_time = content.start_time
             finish_date = content.finish_date
             finish_time = content.finish_time
-
-            task_count = task_count + 1
-            
-            if content.done:
-                done_count = done_count + 1
 
             tasks.append({
                 'task_id':task_id,
@@ -199,11 +194,6 @@ def AllTask(request):
             'condition':condition,
     }
 
-    print(task_count)
-    print(done_count)
-
-    request.session['count'] = {'task_count':task_count, 'done_count':done_count,}
-
     return render(request, 'myTask/allTask.html', params)
 
 
@@ -211,21 +201,28 @@ def Manage(request):
 
     username = request.session.get('username', None)
     if username is not None:
-        count = request.session.get('count', None)
-        if count is not None:
-            if count['task_count'] == 0:
-                task_done = 0
-            else:
-                task_done = count['done_count']/count['task_count']
-            params = {
-                'username':username['username'],
-                'task_count':count['task_count'],
-                'done_count':count['done_count'],
-                'task_done':task_done,
-            }
-            return render(request, "myTask/manage.html", params)
+        task_count = 0
+        done_count = 0
+        contents = TaskModel.objects.filter(user_name=username['username'])
+
+        for content in contents:
+            task_count = task_count + 1
+            if content.done:
+                done_count = done_count + 1
+        
+        if task_count == 0:
+            task_done = 0
         else:
-            message = "総タスク数、総タスク達成数が取得できませんでした。"
-            return render(request, "myTask/manage.html", context = {"username":username["username"], "task_count":0, "done_count":0, "task_done":0, "message":message})
+            task_done = done_count/task_count
+
+        params = {
+            'username':username['username'],
+            'task_count':task_count,
+            'done_count':done_count,
+            'task_done':task_done*100,
+        }
+
+        return render(request, "myTask/manage.html", params)
+    
     else:
-        return redirect('main')
+        return redirect('index')
