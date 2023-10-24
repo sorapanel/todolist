@@ -9,7 +9,7 @@
         {% endif %}
         {% for task in tasks %}
         <div>
-          <li><p>{{ task.name }} &#9;{{ task.start_date }}&#9;{{ task.start_time }}&#9;{{ task.finish_date }}&#9;{{ task.finish_time }}</p>
+          <li><p>{{ task.name }} &#9;{{ task.start_date }}&#9;{{ task.start_time }}&#9;{{ task.finish_date }}&#9;{{ task.finish_time }}&#9;{{ task.like }}</p>
           <a href="{% url 'mod_task' task.task_id %}" class="btn btn-primary">タスクを編集</a>
         </div>
         {% endfor %}

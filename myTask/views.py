@@ -179,6 +179,7 @@ def AllTask(request):
             start_time = content.start_time
             finish_date = content.finish_date
             finish_time = content.finish_time
+            like = content.like
 
             task_count = task_count + 1
             
@@ -193,6 +194,7 @@ def AllTask(request):
                 'start_time':start_time,
                 'finish_date':finish_date,
                 'finish_time':finish_time,
+                'like':like,
             })
 
     sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
@@ -233,7 +235,7 @@ def Manage(request):
             return render(request, "myTask/manage.html", context = {"username":username["username"], "task_count":0, "done_count":0, "task_done":0, "message":message})
     else:
         return redirect('main')
-    
+
 def OnlineTask(request):
     contents = TaskModel.objects.filter(active=True, done=True)
 
@@ -277,19 +279,24 @@ def OnlineTask(request):
         print(task_id)
         task = TaskModel.objects.get(task_id = task_id)
         username = request.session.get('username', None)
-        like = LikeModel.objects.create(user_name=user_name, task=task)
-        islike = LikeModel.objects.get(task=task, user_name = username['username'])
+        try:
+            islike = LikeModel.objects.get(user_name=username['username'], task=task)
+        except LikeModel.DoesNotExist:
+            islike = LikeModel.objects.create(user_name=username['username'], task=task)
+            pass
 
         if islike is not None:
             if islike.is_like:
                 islike.is_like = False
-                islike.save()
                 task.like -= 1
+                print(task.like)
+                islike.save()
                 task.save()
             else:
                 islike.is_like = True
-                islike.save()
                 task.like += 1
+                print(task.like)
+                islike.save()
                 task.save()
         else:
             print("LikeModelが存在しません。")
@@ -300,8 +307,3 @@ def OnlineTask(request):
     }
 
     return render(request, 'myTask/onlineTask.html', params)
-
-
-
-
-

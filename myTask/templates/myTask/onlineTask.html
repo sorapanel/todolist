@@ -8,11 +8,11 @@
         {% endif %}
         {% for task in tasks %}
         <div>
-          <li><p>{{ task.name }} &#9;{{ task.user_name }} &#9;{{ task.description }} &#9;{{ task.like }}</p></li>
+          <li><p>{{ task.name }} &#9;{{ task.user_name }} &#9;{{ task.description }}</p></li>
           <form method="post">
             {% csrf_token %}
             <input type="hidden" name="like" value="{{ task.task_id }}">
-            <button class="btn btn-info" type="submit">いいね</button>
+            <button class="like-button like" data-task-id="{{ task.task_id }}" type="submit">いいね</button>
           </form>
         </div>
         {% endfor %}
