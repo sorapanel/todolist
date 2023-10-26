@@ -21,5 +21,13 @@
 
 <div class="text-center">
     <a href="{% url 'add_task' %}" class="add-task hand-letter">タスクを登録</a>
+    <br>
+    <br>
+    <form method="post" action="{% url 'all_task' %}">
+        {% csrf_token %}
+        <input type="hidden" name="comment" value="comment">
+        <button class="comment hand-letter" type="submit">コメントを見る。</button>
+    </form>
 </div>
+
 {% endblock %}

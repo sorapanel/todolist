@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <p class="hand-letter" style="font-size: x-large;">みんなのタスク一覧</p>
+    {% if is_message %}
+    <script>
+      alert('{{ message }}');
+    </script>
+    {% endif %}
+    <ul>
+        {% if condition %}
+        <li class="hand-letter">タスクが存在しません。</li>
+        {% endif %}
+        {% for task in tasks %}
+        <div>
+          <div class="row">
+            <li><p class="hand-letter">タスク名：{{ task.name }}<br>作成者：{{ task.user_name }}<br>詳細：{{ task.description }}</p></li>
+            <form method="post" style="padding-left: 100px;">
+              {% csrf_token %}
+              <input type="hidden" name="like" value="{{ task.task_id }}">
+              <button class="like hand-letter" data-task-id="{{ task.task_id }}" type="submit">いいね</button>
+            </form>
+          </div>
+          
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ task.task_id }}">
+            <textarea name="comment" id="comment"></textarea>
+            <br>
+            <button class="do-comment hand-letter" data-task-id="{{ task.task_id }}" type="submit">コメントする。</button>
+          </form>
+          
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
