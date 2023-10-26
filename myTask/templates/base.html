@@ -19,6 +19,13 @@
             background-image: url("{% static 'text_ver2.png' %}");
             background-repeat: repeat;
         }
+        button{
+        border: none;
+        background-color: rgba(0,0,0,0);
+        }
+        button:focus {
+            outline: none; 
+        }
         .edit-task{
             background-image: url('{% static "stickynote_11.png" %}');
             background-size: cover;
@@ -26,12 +33,58 @@
             color: #000000;
             font-size: large;
         }
+        .edit-task:hover{
+            color: #3498db;
+        }
+        .like{
+            background-image: url('{% static "like.png" %}');
+            background-size: 60px 30px;
+            background-repeat: no-repeat;
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
+        }
+        .like:hover{
+            color: #3498db;
+            text-decoration: underline;
+        }
         .add-task{
             background-image: url('{% static "addTask_image_ver2.jpg" %}');
             background-size: cover;
             color: black;
             padding: 20px;
             font-size: large;
+        }
+        textarea{
+            resize:none;
+            width: 350px;
+            height: 100px;
+        }
+        .add-task:hover{
+            color: #3498db;
+        }
+        .comment{
+            background-image: url('{% static "addTask_image_ver2.jpg" %}');
+            background-size: cover;
+            color: black;
+            padding: 15px 0px;
+            font-size: large;
+            border: none;
+        }
+        .comment:hover{
+            color: #3498db;
+            text-decoration: underline;
+        }
+        .do-comment{
+            background-image: url('{% static "addTask_image_ver2.jpg" %}');
+            background-size: cover;
+            color: black;
+            padding: 10px 0px;
+            font-size: large;
+            border: none;
+        }
+        .do-comment:hover{
+            color: #3498db;
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -47,6 +100,9 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'all_task' %}">すべてのタスクを見る</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'online_task' %}">みんなのタスクを見る</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'manage' %}">アカウント管理</a>

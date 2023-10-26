@@ -9,7 +9,7 @@
         {% endif %}
         {% for task in tasks %}
         <div>
-          <li><p  class="hand-letter">{{ task.task_id }}-{{ task.name }} <br>開始： {{ task.start_date }}/{{ task.start_time }}&#9;終了：{{ task.finish_date }}/{{ task.finish_time }} <br> 詳細：{{ task.description }}</p>
+          <li><p  class="hand-letter">{{ task.name }} <br>開始： {{ task.start_date }}/{{ task.start_time }}&#9;終了：{{ task.finish_date }}/{{ task.finish_time }} <br>いいね数：{{ task.like }}<br>詳細：{{ task.description }}</p>
           <a href="{% url 'mod_task' task.task_id %}" class="edit-task hand-letter">タスクを編集</a>
           <br><br><br>
         </div>
