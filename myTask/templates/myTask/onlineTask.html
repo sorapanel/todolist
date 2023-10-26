@@ -2,6 +2,11 @@
 {% block content %}
 <div>
     <p>みんなのタスク一覧</p>
+    {% if is_message %}
+    <script>
+      alert('{{ message }}');
+    </script>
+    {% endif %}
     <ul>
         {% if condition %}
         <li>タスクが存在しません。</li>
@@ -13,6 +18,12 @@
             {% csrf_token %}
             <input type="hidden" name="like" value="{{ task.task_id }}">
             <button class="like-button like" data-task-id="{{ task.task_id }}" type="submit">いいね</button>
+          </form>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ task.task_id }}">
+            <textarea name="comment" id="comment"></textarea>
+            <button class="comment" data-task-id="{{ task.task_id }}" type="submit">コメントする</button>
           </form>
         </div>
         {% endfor %}

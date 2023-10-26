@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <p>コメント一覧</p>
+    <ul>
+        {% for comment in comments %}
+        <div>
+          <li><p>{{ comment.task_name }}&#9;{{ comment.user_name }}&#9;{{ comment.content }}</p>
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

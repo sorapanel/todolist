@@ -26,3 +26,10 @@ class LikeModel(models.Model):
                 name="like_unique"
             ),
         ]
+
+class CommentModel(models.Model):
+    comment_id = models.BigAutoField(primary_key=True,)
+    task = models.ForeignKey(TaskModel, on_delete=models.CASCADE, to_field="task_id",)
+    user_name = models.CharField(null=False, max_length=100, blank=False,)
+    content = models.CharField(null=False, max_length=250, blank=True,)
+    
