@@ -6,44 +6,52 @@ import datetime
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
 
+def collect_tasks(contents):
+    tasks = []
+    for content in contents:
+            task_id = content.task_id
+            name = content.name
+            description = content.description
+            start_date = content.start_date
+            start_time = content.start_time
+            finish_date = content.finish_date
+            finish_time = content.finish_time
+            like = content.like
+            user_name = content.user_name
+
+            tasks.append({
+                'task_id':task_id,
+                'name':name,
+                'description':description,
+                'start_date':start_date,
+                'start_time':start_time,
+                'finish_date':finish_date,
+                'finish_time':finish_time,
+                'like':like,
+                'user_name':user_name,
+            })
+
+    sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
+    sorted_tasks = sorted(sorted_tasks, key=lambda x: x["start_date"])
+
+    return sorted_tasks
+
+
 # Create your views here.
 def Main(request):
 
     user_name = request.session.get('username', None)
 
-    contents = TaskModel.objects.filter(user_name=user_name['username'])
+    contents = TaskModel.objects.filter(user_name=user_name['username'], active=True, done=False)
 
-    tasks = []
 
     condition = True 
 
     if any(contents):
         condition = False
 
-
-    for content in contents:
-        if content.active:
-            if not content.done:
-                task_id = content.task_id
-                name = content.name
-                description = content.description
-                start_date = content.start_date
-                start_time = content.start_time
-                finish_date = content.finish_date
-                finish_time = content.finish_time
-
-                tasks.append({
-                    'task_id':task_id,
-                    'name':name,
-                    'description':description,
-                    'start_date':start_date,
-                    'start_time':start_time,
-                    'finish_date':finish_date,
-                    'finish_time':finish_time,
-                })
-
-    sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
-    sorted_tasks = sorted(sorted_tasks, key=lambda x: x["start_date"])
+    sorted_tasks = collect_tasks(contents=contents)
+    
 
     params = {
             'tasks':sorted_tasks,
@@ -157,36 +165,12 @@ def AllTask(request):
 
     contents = TaskModel.objects.filter(user_name=user_name['username'])
 
-    tasks = []
-
     condition = True 
 
     if any(contents):
         condition = False
 
-    for content in contents:
-            task_id = content.task_id
-            name = content.name
-            description = content.description
-            start_date = content.start_date
-            start_time = content.start_time
-            finish_date = content.finish_date
-            finish_time = content.finish_time
-            like = content.like
-
-            tasks.append({
-                'task_id':task_id,
-                'name':name,
-                'description':description,
-                'start_date':start_date,
-                'start_time':start_time,
-                'finish_date':finish_date,
-                'finish_time':finish_time,
-                'like':like,
-            })
-
-    sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
-    sorted_tasks = sorted(sorted_tasks, key=lambda x: x["start_date"])
+    sorted_tasks = collect_tasks(contents=contents)
 
     comments = []
 
@@ -255,32 +239,7 @@ def OnlineTask(request):
     if any(contents):
         condition = False
 
-
-    for content in contents:
-        task_id = content.task_id
-        name = content.name
-        description = content.description
-        start_date = content.start_date
-        start_time = content.start_time
-        finish_date = content.finish_date
-        finish_time = content.finish_time
-        user_name = content.user_name
-        like = content.like
-
-        tasks.append({
-            'task_id':task_id,
-            'name':name,
-            'description':description,
-            'start_date':start_date,
-            'start_time':start_time,
-            'finish_date':finish_date,
-            'finish_time':finish_time,
-            'user_name':user_name,
-            'like':like,
-        })
-
-    sorted_tasks = sorted(tasks, key=lambda x: x["start_time"])
-    sorted_tasks = sorted(sorted_tasks, key=lambda x: x["start_date"])
+    sorted_tasks = collect_tasks(contents=contents)
     
     if request.method == 'POST':
         task_id = request.POST.get('like', None)
