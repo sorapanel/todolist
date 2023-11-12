@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-
+#サインアップ用
 class AccountForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','style': 'width: 270px; margin: 0 auto;'}),label="ユーザ名")
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','style': 'width: 270px; margin: 0 auto;'}),label="パスワード")
@@ -13,10 +13,12 @@ class AccountForm(forms.ModelForm):
         fields = ('username','email','password')
         labels = {'username':"ユーザーID",'email':"メール"}
 
+#ログイン用
 class LoginForm(forms.Form):
     name = forms.CharField(label='ユーザ名', widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}),label="パスワード")
 
+#アカウント停止用
 class DeleteForm(forms.Form):
     name = forms.CharField(label='ユーザ名', widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}),label="パスワード")
